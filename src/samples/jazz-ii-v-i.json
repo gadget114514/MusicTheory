@@ -1,0 +1,669 @@
+{
+  "version": 1,
+  "meta": {
+    "title": "自作進行: ii-V-I (C major)",
+    "tonic": "C",
+    "scale": "major",
+    "bpm": 92,
+    "timeSig": [
+      4,
+      4
+    ]
+  },
+  "notes": [
+    {
+      "id": "n001",
+      "time": 0,
+      "duration": 4,
+      "midi": 48,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n002",
+      "time": 0,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n003",
+      "time": 0,
+      "duration": 4,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n004",
+      "time": 0,
+      "duration": 4,
+      "midi": 67,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n005",
+      "time": 0,
+      "duration": 4,
+      "midi": 71,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n006",
+      "time": 3,
+      "duration": 1,
+      "midi": 83,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n007",
+      "time": 4,
+      "duration": 2,
+      "midi": 45,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n008",
+      "time": 4,
+      "duration": 2,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n009",
+      "time": 4,
+      "duration": 2,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n010",
+      "time": 4,
+      "duration": 2,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n011",
+      "time": 4,
+      "duration": 2,
+      "midi": 67,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n012",
+      "time": 6,
+      "duration": 2,
+      "midi": 50,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n013",
+      "time": 6,
+      "duration": 2,
+      "midi": 50,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n014",
+      "time": 6,
+      "duration": 2,
+      "midi": 54,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n015",
+      "time": 6,
+      "duration": 2,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n016",
+      "time": 6,
+      "duration": 2,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n017",
+      "time": 8,
+      "duration": 4,
+      "midi": 43,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n018",
+      "time": 8,
+      "duration": 4,
+      "midi": 55,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n019",
+      "time": 8,
+      "duration": 4,
+      "midi": 59,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n020",
+      "time": 8,
+      "duration": 4,
+      "midi": 62,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n021",
+      "time": 8,
+      "duration": 4,
+      "midi": 65,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n022",
+      "time": 11,
+      "duration": 1,
+      "midi": 77,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n023",
+      "time": 12,
+      "duration": 4,
+      "midi": 48,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n024",
+      "time": 12,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n025",
+      "time": 12,
+      "duration": 4,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n026",
+      "time": 12,
+      "duration": 4,
+      "midi": 67,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n027",
+      "time": 12,
+      "duration": 4,
+      "midi": 71,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n028",
+      "time": 15,
+      "duration": 1,
+      "midi": 83,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n029",
+      "time": 16,
+      "duration": 4,
+      "midi": 41,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n030",
+      "time": 16,
+      "duration": 4,
+      "midi": 53,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n031",
+      "time": 16,
+      "duration": 4,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n032",
+      "time": 16,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n033",
+      "time": 16,
+      "duration": 4,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n034",
+      "time": 19,
+      "duration": 1,
+      "midi": 76,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n035",
+      "time": 20,
+      "duration": 2,
+      "midi": 40,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n036",
+      "time": 20,
+      "duration": 2,
+      "midi": 52,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n037",
+      "time": 20,
+      "duration": 2,
+      "midi": 55,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n038",
+      "time": 20,
+      "duration": 2,
+      "midi": 59,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n039",
+      "time": 20,
+      "duration": 2,
+      "midi": 62,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n040",
+      "time": 22,
+      "duration": 2,
+      "midi": 45,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n041",
+      "time": 22,
+      "duration": 2,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n042",
+      "time": 22,
+      "duration": 2,
+      "midi": 49,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n043",
+      "time": 22,
+      "duration": 2,
+      "midi": 52,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n044",
+      "time": 22,
+      "duration": 2,
+      "midi": 55,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n045",
+      "time": 24,
+      "duration": 2,
+      "midi": 50,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n046",
+      "time": 24,
+      "duration": 2,
+      "midi": 50,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n047",
+      "time": 24,
+      "duration": 2,
+      "midi": 53,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n048",
+      "time": 24,
+      "duration": 2,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n049",
+      "time": 24,
+      "duration": 2,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n050",
+      "time": 26,
+      "duration": 2,
+      "midi": 43,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n051",
+      "time": 26,
+      "duration": 2,
+      "midi": 55,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n052",
+      "time": 26,
+      "duration": 2,
+      "midi": 59,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n053",
+      "time": 26,
+      "duration": 2,
+      "midi": 62,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n054",
+      "time": 26,
+      "duration": 2,
+      "midi": 65,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n055",
+      "time": 28,
+      "duration": 4,
+      "midi": 48,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n056",
+      "time": 28,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n057",
+      "time": 28,
+      "duration": 4,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n058",
+      "time": 28,
+      "duration": 4,
+      "midi": 67,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n059",
+      "time": 28,
+      "duration": 4,
+      "midi": 71,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n060",
+      "time": 31,
+      "duration": 1,
+      "midi": 83,
+      "velocity": 98,
+      "source": "sample"
+    }
+  ],
+  "chords": [
+    {
+      "id": "c001",
+      "time": 0,
+      "duration": 4,
+      "symbol": "Cmaj7",
+      "candidates": [
+        "Cmaj7"
+      ],
+      "roman": "I",
+      "confidence": 1
+    },
+    {
+      "id": "c002",
+      "time": 4,
+      "duration": 2,
+      "symbol": "Am7",
+      "candidates": [
+        "Am7",
+        "A7#5"
+      ],
+      "roman": "vi",
+      "confidence": 1
+    },
+    {
+      "id": "c003",
+      "time": 6,
+      "duration": 2,
+      "symbol": "D7",
+      "candidates": [
+        "D7",
+        "Dm7"
+      ],
+      "confidence": 1
+    },
+    {
+      "id": "c004",
+      "time": 8,
+      "duration": 4,
+      "symbol": "Gmaj7",
+      "candidates": [
+        "Gmaj7"
+      ],
+      "confidence": 1
+    },
+    {
+      "id": "c005",
+      "time": 12,
+      "duration": 4,
+      "symbol": "Cmaj7",
+      "candidates": [
+        "Cmaj7"
+      ],
+      "roman": "I",
+      "confidence": 1
+    },
+    {
+      "id": "c006",
+      "time": 16,
+      "duration": 4,
+      "symbol": "Fmaj7",
+      "candidates": [
+        "Fmaj7"
+      ],
+      "roman": "IV",
+      "confidence": 1
+    },
+    {
+      "id": "c007",
+      "time": 20,
+      "duration": 2,
+      "symbol": "Em7",
+      "candidates": [
+        "Em7",
+        "E5b"
+      ],
+      "roman": "iii",
+      "confidence": 1
+    },
+    {
+      "id": "c008",
+      "time": 22,
+      "duration": 2,
+      "symbol": "A7",
+      "candidates": [
+        "A7",
+        "Am7"
+      ],
+      "confidence": 1
+    },
+    {
+      "id": "c009",
+      "time": 24,
+      "duration": 2,
+      "symbol": "Dm7",
+      "candidates": [
+        "Dm7",
+        "Dm7b5"
+      ],
+      "roman": "ii",
+      "confidence": 1
+    },
+    {
+      "id": "c010",
+      "time": 26,
+      "duration": 2,
+      "symbol": "G7",
+      "candidates": [
+        "G7",
+        "Cmaj7/G"
+      ],
+      "roman": "V",
+      "confidence": 1
+    },
+    {
+      "id": "c011",
+      "time": 28,
+      "duration": 4,
+      "symbol": "Cmaj7",
+      "candidates": [
+        "Cmaj7"
+      ],
+      "roman": "I",
+      "confidence": 1
+    }
+  ],
+  "events": [
+    {
+      "id": "ev-sd-1",
+      "time": 6,
+      "kind": "tonicization",
+      "label": "D7 (V/V)。G major へ一瞬OOKれ込む",
+      "fromKey": "C major",
+      "toKey": "C major",
+      "source": "author",
+      "confidence": 1,
+      "duration": 2,
+      "memo": "キーバッジは変えない。強い旗は立てない。"
+    },
+    {
+      "id": "ev-sd-2",
+      "time": 22,
+      "kind": "tonicization",
+      "label": "A7 (V/vi)",
+      "fromKey": "C major",
+      "toKey": "C major",
+      "source": "author",
+      "confidence": 1,
+      "duration": 2,
+      "memo": "キーバッジは変えない。"
+    },
+    {
+      "id": "ev-cad-2",
+      "time": 12,
+      "kind": "cadence",
+      "label": "カデンツ (Gmaj7 → Cmaj7)",
+      "fromKey": "C major",
+      "toKey": "C major",
+      "source": "author",
+      "confidence": 1,
+      "duration": 4
+    },
+    {
+      "id": "ev-cad-3",
+      "time": 28,
+      "kind": "cadence",
+      "label": "カデンツ (G7 → Cmaj7)",
+      "fromKey": "C major",
+      "toKey": "C major",
+      "source": "author",
+      "confidence": 1,
+      "duration": 4
+    }
+  ]
+}

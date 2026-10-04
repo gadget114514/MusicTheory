@@ -1,0 +1,528 @@
+{
+  "version": 1,
+  "meta": {
+    "title": "自作進行: I-V-vi-IV → A minor",
+    "tonic": "C",
+    "scale": "major",
+    "bpm": 100,
+    "timeSig": [
+      4,
+      4
+    ]
+  },
+  "notes": [
+    {
+      "id": "n001",
+      "time": 0,
+      "duration": 4,
+      "midi": 48,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n002",
+      "time": 0,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n003",
+      "time": 0,
+      "duration": 4,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n004",
+      "time": 0,
+      "duration": 4,
+      "midi": 67,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n005",
+      "time": 2,
+      "duration": 1,
+      "midi": 64,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n006",
+      "time": 3,
+      "duration": 1,
+      "midi": 67,
+      "velocity": 94,
+      "source": "sample"
+    },
+    {
+      "id": "n007",
+      "time": 4,
+      "duration": 4,
+      "midi": 43,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n008",
+      "time": 4,
+      "duration": 4,
+      "midi": 55,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n009",
+      "time": 4,
+      "duration": 4,
+      "midi": 59,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n010",
+      "time": 4,
+      "duration": 4,
+      "midi": 62,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n011",
+      "time": 6,
+      "duration": 1,
+      "midi": 62,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n012",
+      "time": 7,
+      "duration": 1,
+      "midi": 71,
+      "velocity": 94,
+      "source": "sample"
+    },
+    {
+      "id": "n013",
+      "time": 8,
+      "duration": 4,
+      "midi": 45,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n014",
+      "time": 8,
+      "duration": 4,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n015",
+      "time": 8,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n016",
+      "time": 8,
+      "duration": 4,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n017",
+      "time": 10,
+      "duration": 1,
+      "midi": 72,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n018",
+      "time": 11,
+      "duration": 1,
+      "midi": 69,
+      "velocity": 94,
+      "source": "sample"
+    },
+    {
+      "id": "n019",
+      "time": 12,
+      "duration": 4,
+      "midi": 41,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n020",
+      "time": 12,
+      "duration": 4,
+      "midi": 53,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n021",
+      "time": 12,
+      "duration": 4,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n022",
+      "time": 12,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n023",
+      "time": 14,
+      "duration": 1,
+      "midi": 69,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n024",
+      "time": 15,
+      "duration": 1,
+      "midi": 65,
+      "velocity": 94,
+      "source": "sample"
+    },
+    {
+      "id": "n025",
+      "time": 16,
+      "duration": 4,
+      "midi": 45,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n026",
+      "time": 16,
+      "duration": 4,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n027",
+      "time": 16,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n028",
+      "time": 16,
+      "duration": 4,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n029",
+      "time": 18,
+      "duration": 1,
+      "midi": 69,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n030",
+      "time": 19,
+      "duration": 1,
+      "midi": 72,
+      "velocity": 94,
+      "source": "sample"
+    },
+    {
+      "id": "n031",
+      "time": 20,
+      "duration": 4,
+      "midi": 50,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n032",
+      "time": 20,
+      "duration": 4,
+      "midi": 50,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n033",
+      "time": 20,
+      "duration": 4,
+      "midi": 53,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n034",
+      "time": 20,
+      "duration": 4,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n035",
+      "time": 22,
+      "duration": 1,
+      "midi": 69,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n036",
+      "time": 23,
+      "duration": 1,
+      "midi": 67,
+      "velocity": 94,
+      "source": "sample"
+    },
+    {
+      "id": "n037",
+      "time": 24,
+      "duration": 4,
+      "midi": 40,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n038",
+      "time": 24,
+      "duration": 4,
+      "midi": 52,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n039",
+      "time": 24,
+      "duration": 4,
+      "midi": 56,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n040",
+      "time": 24,
+      "duration": 4,
+      "midi": 59,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n041",
+      "time": 26,
+      "duration": 1,
+      "midi": 67,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n042",
+      "time": 27,
+      "duration": 1,
+      "midi": 71,
+      "velocity": 94,
+      "source": "sample"
+    },
+    {
+      "id": "n043",
+      "time": 28,
+      "duration": 4,
+      "midi": 45,
+      "velocity": 66,
+      "source": "sample"
+    },
+    {
+      "id": "n044",
+      "time": 28,
+      "duration": 4,
+      "midi": 57,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n045",
+      "time": 28,
+      "duration": 4,
+      "midi": 60,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n046",
+      "time": 28,
+      "duration": 4,
+      "midi": 64,
+      "velocity": 76,
+      "source": "sample"
+    },
+    {
+      "id": "n047",
+      "time": 30,
+      "duration": 1,
+      "midi": 69,
+      "velocity": 98,
+      "source": "sample"
+    },
+    {
+      "id": "n048",
+      "time": 31,
+      "duration": 1,
+      "midi": 72,
+      "velocity": 94,
+      "source": "sample"
+    }
+  ],
+  "chords": [
+    {
+      "id": "c001",
+      "time": 0,
+      "duration": 4,
+      "symbol": "C",
+      "candidates": [
+        "C"
+      ],
+      "roman": "I",
+      "confidence": 1
+    },
+    {
+      "id": "c002",
+      "time": 4,
+      "duration": 4,
+      "symbol": "G",
+      "candidates": [
+        "G"
+      ],
+      "roman": "V",
+      "confidence": 1
+    },
+    {
+      "id": "c003",
+      "time": 8,
+      "duration": 4,
+      "symbol": "Am",
+      "candidates": [
+        "Am"
+      ],
+      "roman": "vi",
+      "confidence": 1
+    },
+    {
+      "id": "c004",
+      "time": 12,
+      "duration": 4,
+      "symbol": "F",
+      "candidates": [
+        "F"
+      ],
+      "roman": "IV",
+      "confidence": 1
+    },
+    {
+      "id": "c005",
+      "time": 16,
+      "duration": 4,
+      "symbol": "Am",
+      "candidates": [
+        "Am"
+      ],
+      "roman": "i",
+      "confidence": 1
+    },
+    {
+      "id": "c006",
+      "time": 20,
+      "duration": 4,
+      "symbol": "Dm",
+      "candidates": [
+        "Dm"
+      ],
+      "roman": "iv",
+      "confidence": 1
+    },
+    {
+      "id": "c007",
+      "time": 24,
+      "duration": 4,
+      "symbol": "E",
+      "candidates": [
+        "E"
+      ],
+      "roman": "V",
+      "confidence": 1
+    },
+    {
+      "id": "c008",
+      "time": 28,
+      "duration": 4,
+      "symbol": "Am",
+      "candidates": [
+        "Am"
+      ],
+      "roman": "i",
+      "confidence": 1
+    }
+  ],
+  "events": [
+    {
+      "id": "ev-mod-1",
+      "time": 16,
+      "kind": "modulation",
+      "label": "C major から A minor へ。共通コードは Am",
+      "fromKey": "C major",
+      "toKey": "A minor",
+      "pivot": "Am",
+      "source": "author",
+      "confidence": 1,
+      "duration": 8,
+      "pauseOnPass": true,
+      "memo": "この旗で止まる。Tutorial のステップと紐づけている。"
+    },
+    {
+      "id": "ev-ton-1",
+      "time": 24,
+      "kind": "tonicization",
+      "label": "E major (A minor の V。ハ長調の G を G# に上げる)",
+      "fromKey": "A minor",
+      "toKey": "A minor",
+      "source": "author",
+      "confidence": 1,
+      "duration": 4,
+      "memo": "キーバッジは変えない。キーは A minor のまま。"
+    },
+    {
+      "id": "ev-cad-1",
+      "time": 28,
+      "kind": "cadence",
+      "label": "カデンツ (E → Am)",
+      "fromKey": "A minor",
+      "toKey": "A minor",
+      "source": "author",
+      "confidence": 1,
+      "duration": 4
+    }
+  ]
+}

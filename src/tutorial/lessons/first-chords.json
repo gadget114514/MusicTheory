@@ -1,0 +1,771 @@
+{
+  "id": "first-chords",
+  "title": "最初の和音 4 つ",
+  "tonic": "C",
+  "keyName": "C major",
+  "score": {
+    "meta": {
+      "title": "レッスン: I-vi-IV-V",
+      "tonic": "C",
+      "scale": "major",
+      "bpm": 72,
+      "timeSig": [
+        4,
+        4
+      ]
+    },
+    "notes": [
+      {
+        "id": "n001",
+        "time": 0,
+        "duration": 8,
+        "midi": 48,
+        "velocity": 60,
+        "source": "sample"
+      },
+      {
+        "id": "n002",
+        "time": 0,
+        "duration": 8,
+        "midi": 60,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n003",
+        "time": 0,
+        "duration": 8,
+        "midi": 64,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n004",
+        "time": 0,
+        "duration": 8,
+        "midi": 67,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n005",
+        "time": 2,
+        "duration": 0.5,
+        "midi": 60,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n006",
+        "time": 2.5,
+        "duration": 0.5,
+        "midi": 64,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n007",
+        "time": 3,
+        "duration": 0.5,
+        "midi": 67,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n008",
+        "time": 3.5,
+        "duration": 0.5,
+        "midi": 72,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n009",
+        "time": 4,
+        "duration": 0.5,
+        "midi": 67,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n010",
+        "time": 4.5,
+        "duration": 0.5,
+        "midi": 64,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n011",
+        "time": 5,
+        "duration": 0.5,
+        "midi": 72,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n012",
+        "time": 5.5,
+        "duration": 0.5,
+        "midi": 79,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n013",
+        "time": 6,
+        "duration": 0.5,
+        "midi": 60,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n014",
+        "time": 6.5,
+        "duration": 0.5,
+        "midi": 64,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n015",
+        "time": 7,
+        "duration": 0.5,
+        "midi": 67,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n016",
+        "time": 7.5,
+        "duration": 0.5,
+        "midi": 72,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n017",
+        "time": 8,
+        "duration": 8,
+        "midi": 45,
+        "velocity": 60,
+        "source": "sample"
+      },
+      {
+        "id": "n018",
+        "time": 8,
+        "duration": 8,
+        "midi": 57,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n019",
+        "time": 8,
+        "duration": 8,
+        "midi": 60,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n020",
+        "time": 8,
+        "duration": 8,
+        "midi": 64,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n021",
+        "time": 10,
+        "duration": 0.5,
+        "midi": 57,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n022",
+        "time": 10.5,
+        "duration": 0.5,
+        "midi": 60,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n023",
+        "time": 11,
+        "duration": 0.5,
+        "midi": 64,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n024",
+        "time": 11.5,
+        "duration": 0.5,
+        "midi": 69,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n025",
+        "time": 12,
+        "duration": 0.5,
+        "midi": 64,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n026",
+        "time": 12.5,
+        "duration": 0.5,
+        "midi": 60,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n027",
+        "time": 13,
+        "duration": 0.5,
+        "midi": 69,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n028",
+        "time": 13.5,
+        "duration": 0.5,
+        "midi": 76,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n029",
+        "time": 14,
+        "duration": 0.5,
+        "midi": 57,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n030",
+        "time": 14.5,
+        "duration": 0.5,
+        "midi": 60,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n031",
+        "time": 15,
+        "duration": 0.5,
+        "midi": 64,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n032",
+        "time": 15.5,
+        "duration": 0.5,
+        "midi": 69,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n033",
+        "time": 16,
+        "duration": 8,
+        "midi": 41,
+        "velocity": 60,
+        "source": "sample"
+      },
+      {
+        "id": "n034",
+        "time": 16,
+        "duration": 8,
+        "midi": 53,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n035",
+        "time": 16,
+        "duration": 8,
+        "midi": 57,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n036",
+        "time": 16,
+        "duration": 8,
+        "midi": 60,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n037",
+        "time": 18,
+        "duration": 0.5,
+        "midi": 53,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n038",
+        "time": 18.5,
+        "duration": 0.5,
+        "midi": 57,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n039",
+        "time": 19,
+        "duration": 0.5,
+        "midi": 60,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n040",
+        "time": 19.5,
+        "duration": 0.5,
+        "midi": 65,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n041",
+        "time": 20,
+        "duration": 0.5,
+        "midi": 60,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n042",
+        "time": 20.5,
+        "duration": 0.5,
+        "midi": 57,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n043",
+        "time": 21,
+        "duration": 0.5,
+        "midi": 65,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n044",
+        "time": 21.5,
+        "duration": 0.5,
+        "midi": 72,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n045",
+        "time": 22,
+        "duration": 0.5,
+        "midi": 53,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n046",
+        "time": 22.5,
+        "duration": 0.5,
+        "midi": 57,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n047",
+        "time": 23,
+        "duration": 0.5,
+        "midi": 60,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n048",
+        "time": 23.5,
+        "duration": 0.5,
+        "midi": 65,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n049",
+        "time": 24,
+        "duration": 8,
+        "midi": 43,
+        "velocity": 60,
+        "source": "sample"
+      },
+      {
+        "id": "n050",
+        "time": 24,
+        "duration": 8,
+        "midi": 55,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n051",
+        "time": 24,
+        "duration": 8,
+        "midi": 59,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n052",
+        "time": 24,
+        "duration": 8,
+        "midi": 62,
+        "velocity": 68,
+        "source": "sample"
+      },
+      {
+        "id": "n053",
+        "time": 26,
+        "duration": 0.5,
+        "midi": 55,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n054",
+        "time": 26.5,
+        "duration": 0.5,
+        "midi": 59,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n055",
+        "time": 27,
+        "duration": 0.5,
+        "midi": 62,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n056",
+        "time": 27.5,
+        "duration": 0.5,
+        "midi": 67,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n057",
+        "time": 28,
+        "duration": 0.5,
+        "midi": 62,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n058",
+        "time": 28.5,
+        "duration": 0.5,
+        "midi": 59,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n059",
+        "time": 29,
+        "duration": 0.5,
+        "midi": 67,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n060",
+        "time": 29.5,
+        "duration": 0.5,
+        "midi": 74,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n061",
+        "time": 30,
+        "duration": 0.5,
+        "midi": 55,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n062",
+        "time": 30.5,
+        "duration": 0.5,
+        "midi": 59,
+        "velocity": 94,
+        "source": "sample"
+      },
+      {
+        "id": "n063",
+        "time": 31,
+        "duration": 0.5,
+        "midi": 62,
+        "velocity": 100,
+        "source": "sample"
+      },
+      {
+        "id": "n064",
+        "time": 31.5,
+        "duration": 0.5,
+        "midi": 67,
+        "velocity": 94,
+        "source": "sample"
+      }
+    ],
+    "chords": [
+      {
+        "id": "c001",
+        "time": 0,
+        "duration": 8,
+        "symbol": "C",
+        "candidates": [
+          "C",
+          "Cmaj",
+          "C5"
+        ],
+        "roman": "I",
+        "confidence": 1
+      },
+      {
+        "id": "c002",
+        "time": 8,
+        "duration": 8,
+        "symbol": "Am",
+        "candidates": [
+          "Am",
+          "Amin",
+          "Am7"
+        ],
+        "roman": "vi",
+        "confidence": 1
+      },
+      {
+        "id": "c003",
+        "time": 16,
+        "duration": 8,
+        "symbol": "F",
+        "candidates": [
+          "F",
+          "Fmaj",
+          "Fadd9"
+        ],
+        "roman": "IV",
+        "confidence": 1
+      },
+      {
+        "id": "c004",
+        "time": 24,
+        "duration": 8,
+        "symbol": "G",
+        "candidates": [
+          "G",
+          "Gsus4",
+          "G5"
+        ],
+        "roman": "V",
+        "confidence": 1
+      }
+    ],
+    "events": [
+      {
+        "id": "ev-cad-4",
+        "time": 28,
+        "kind": "cadence",
+        "label": "カデンツ (V → I)",
+        "fromKey": "C major",
+        "toKey": "C major",
+        "source": "author",
+        "confidence": 1,
+        "duration": 4
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "step-c",
+      "prompt": "C を弾く。構成音は C E G。",
+      "expect": {
+        "kind": "chord",
+        "symbol": "C"
+      },
+      "pauseSampleOnInput": true,
+      "advanceOn": "match",
+      "fromBeat": 0,
+      "nudge": "C E G の鍵だけ。",
+      "sample": {
+        "notes": [
+          {
+            "id": "n001",
+            "time": 0,
+            "duration": 3,
+            "midi": 60,
+            "velocity": 92,
+            "source": "sample"
+          },
+          {
+            "id": "n002",
+            "time": 0,
+            "duration": 3,
+            "midi": 64,
+            "velocity": 92,
+            "source": "sample"
+          },
+          {
+            "id": "n003",
+            "time": 0,
+            "duration": 3,
+            "midi": 67,
+            "velocity": 92,
+            "source": "sample"
+          }
+        ]
+      }
+    },
+    {
+      "id": "step-am",
+      "prompt": "Am を弾く。構成音は A C E。",
+      "expect": {
+        "kind": "chord",
+        "symbol": "Am"
+      },
+      "pauseSampleOnInput": true,
+      "advanceOn": "match",
+      "fromBeat": 8,
+      "nudge": "A C E の鍵だけ。",
+      "sample": {
+        "notes": [
+          {
+            "id": "n001",
+            "time": 0,
+            "duration": 3,
+            "midi": 57,
+            "velocity": 92,
+            "source": "sample"
+          },
+          {
+            "id": "n002",
+            "time": 0,
+            "duration": 3,
+            "midi": 60,
+            "velocity": 92,
+            "source": "sample"
+          },
+          {
+            "id": "n003",
+            "time": 0,
+            "duration": 3,
+            "midi": 64,
+            "velocity": 92,
+            "source": "sample"
+          }
+        ]
+      }
+    },
+    {
+      "id": "step-f",
+      "prompt": "F を弾く。構成音は F A C。",
+      "expect": {
+        "kind": "chord",
+        "symbol": "F"
+      },
+      "pauseSampleOnInput": true,
+      "advanceOn": "match",
+      "fromBeat": 16,
+      "nudge": "F A C の鍵だけ。",
+      "sample": {
+        "notes": [
+          {
+            "id": "n001",
+            "time": 0,
+            "duration": 3,
+            "midi": 53,
+            "velocity": 92,
+            "source": "sample"
+          },
+          {
+            "id": "n002",
+            "time": 0,
+            "duration": 3,
+            "midi": 57,
+            "velocity": 92,
+            "source": "sample"
+          },
+          {
+            "id": "n003",
+            "time": 0,
+            "duration": 3,
+            "midi": 60,
+            "velocity": 92,
+            "source": "sample"
+          }
+        ]
+      }
+    },
+    {
+      "id": "step-g",
+      "prompt": "G を弾く。構成音は G B D。",
+      "expect": {
+        "kind": "chord",
+        "symbol": "G"
+      },
+      "pauseSampleOnInput": true,
+      "advanceOn": "match",
+      "fromBeat": 24,
+      "nudge": "G B D の鍵だけ。",
+      "sample": {
+        "notes": [
+          {
+            "id": "n001",
+            "time": 0,
+            "duration": 3,
+            "midi": 55,
+            "velocity": 92,
+            "source": "sample"
+          },
+          {
+            "id": "n002",
+            "time": 0,
+            "duration": 3,
+            "midi": 59,
+            "velocity": 92,
+            "source": "sample"
+          },
+          {
+            "id": "n003",
+            "time": 0,
+            "duration": 3,
+            "midi": 62,
+            "velocity": 92,
+            "source": "sample"
+          }
+        ]
+      }
+    },
+    {
+      "id": "step-listen",
+      "prompt": "I-vi-IV-V を最後まで聞く。",
+      "expect": {
+        "kind": "listen"
+      },
+      "pauseSampleOnInput": false,
+      "advanceOn": "manual",
+      "fromBeat": 0
+    }
+  ]
+}

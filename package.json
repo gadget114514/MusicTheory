@@ -1,0 +1,38 @@
+{
+  "name": "theory-desk",
+  "productName": "Theory Desk",
+  "version": "0.3.0",
+  "description": "音楽理論・演奏・録音・自動再生を 1 画面で扱う机上。Electron アプリと GitHub Pages 用の静的版のどちらでも動く。",
+  "license": "MIT",
+  "private": true,
+  "main": "./out/main/index.js",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "electron-vite dev",
+    "dev:web": "vite",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "build:web": "vite build && node scripts/postbuild-web.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tonejs/midi": "^2.0.28",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tone": "^15.1.22",
+    "tonal": "^6.5.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "electron": "^44.5.1",
+    "electron-vite": "^5.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  }
+}

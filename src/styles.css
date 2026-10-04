@@ -1,0 +1,998 @@
+/*
+ * v0.2 1 章のレイアウト約束。
+ *   上バー        高さ 48px 固定
+ *   手引き        幅 300px、折りたためる。上半分の左だけ
+ *   上半分        残り幅の縦 50%。コード進行レールが主
+ *   下半分        縦 50%、幅 100%。鍵盤。スクロールで隠れない
+ *
+ * v0.2 2 章の色:
+ *   琥珀  #f2a13c  今鳴っている
+ *   青緑  #35c6b4  次に弾くべき音
+ *   赤    #e5484d  期待と違う押鍵
+ *   淡灰  #4a4f60  通過済み
+ */
+
+:root {
+  --bg: #12131a;
+  --bg-2: #191b24;
+  --bg-3: #21242f;
+  --line: #2c3040;
+  --text: #e6e8f0;
+  --text-dim: #9aa0b4;
+  --amber: #f2a13c;
+  --teal: #35c6b4;
+  --red: #e5484d;
+  --past: #4a4f60;
+  --accent: #7b8cff;
+  --topbar-h: 48px;
+  --guide-w: 300px;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', system-ui, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  user-select: none;
+}
+
+.app {
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr auto 24px;
+  height: 100%;
+}
+
+/* ------------------------------------------------------------ 上バー */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  height: var(--topbar-h);
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+  overflow: visible;
+  white-space: nowrap;
+}
+
+.topbar-group {
+  display: flex;
+  gap: 4px;
+}
+
+.topbar-right {
+  margin-left: auto;
+  position: relative;
+}
+
+.topbar-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.topbar-field input[type='number'] {
+  width: 54px;
+}
+
+.topbar-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 190px;
+  line-height: 1.2;
+}
+
+.topbar-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-title em {
+  color: var(--text-dim);
+  font-size: 10px;
+  font-style: normal;
+}
+
+input,
+select,
+button {
+  background: var(--bg-3);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 3px 6px;
+  font: inherit;
+}
+
+input[type='number'] {
+  background: var(--bg-3);
+}
+
+.btn {
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.btn:hover {
+  border-color: #454b63;
+}
+
+.btn-small {
+  padding: 3px 7px;
+  font-size: 11px;
+}
+
+.btn-tiny {
+  padding: 1px 6px;
+  font-size: 11px;
+}
+
+.btn-icon {
+  width: 30px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon.is-rec {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.btn.is-on {
+  background: #2c3350;
+  border-color: var(--accent);
+  color: #cfd5ff;
+}
+
+.btn-mode {
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.key-badge {
+  padding: 3px 9px;
+  border-radius: 10px;
+  background: #23304a;
+  border: 1px solid #35456b;
+  color: #b9c6ee;
+  font-size: 12px;
+  min-width: 78px;
+  text-align: center;
+}
+
+.menu {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  z-index: 40;
+  min-width: 220px;
+  padding: 6px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.menu-label {
+  padding: 4px 6px;
+  color: var(--text-dim);
+  font-size: 10px;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  padding: 5px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: var(--bg-3);
+}
+
+/* ------------------------------------------------------------ 作業領域 */
+.workspace {
+  display: flex;
+  min-height: 0;
+}
+
+.guide {
+  width: var(--guide-w);
+  flex: 0 0 var(--guide-w);
+  border-right: 1px solid var(--line);
+  background: var(--bg-2);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.guide-closed {
+  width: 34px;
+  flex: 0 0 34px;
+  padding: 8px 4px;
+  align-items: center;
+}
+
+.guide-open-tab {
+  writing-mode: vertical-rl;
+  padding: 10px 4px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.guide-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.guide-close {
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.guide-title {
+  font-weight: 600;
+}
+
+.guide-state {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 9px;
+  background: var(--bg-3);
+  color: var(--text-dim);
+}
+
+.state-listening {
+  color: var(--amber);
+}
+.state-trying {
+  color: var(--teal);
+}
+.state-matched {
+  color: #7ee08a;
+}
+.state-missed {
+  color: var(--red);
+}
+
+.guide-transient {
+  padding: 8px;
+  border-left: 3px solid var(--amber);
+  background: #23262f;
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+  animation: guide-in 0.16s ease-out;
+}
+
+@keyframes guide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.guide-step {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.guide-prompt {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.guide-detail {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.tone-good {
+  color: #7ee08a;
+}
+.tone-bad {
+  color: var(--red);
+}
+
+.guide-miss {
+  margin: 0;
+  color: var(--red);
+  font-size: 11px;
+}
+
+.guide-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.guide-actions .btn {
+  flex: 1;
+  padding: 8px 0;
+}
+
+.btn-listen.is-on {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.btn-try.is-on {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.guide-legend {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--text-dim);
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.guide-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.swatch-active {
+  background: var(--amber);
+}
+.swatch-expected {
+  background: var(--teal);
+}
+.swatch-wrong {
+  background: var(--red);
+}
+.swatch-past {
+  background: var(--past);
+}
+
+/* ------------------------------------------------------------ 上半分 */
+.upper {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.upper-rail {
+  min-height: 0;
+  display: flex;
+}
+
+.upper-staff {
+  min-height: 0;
+  display: flex;
+  border-top: 1px solid var(--line);
+}
+
+.rail {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 34px;
+  position: relative;
+}
+
+.rail-scroll {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+}
+
+.rail-inner {
+  position: relative;
+  height: 100%;
+  min-height: 132px;
+}
+
+.rail-cell {
+  position: absolute;
+  top: 26px;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-right: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  background: #171923;
+  color: var(--text-dim);
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0 4px;
+  transition: background 0.12s, color 0.12s;
+}
+
+.rail-cell:hover {
+  background: #1d2029;
+}
+
+.rail-cell-symbol {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.rail-cell-roman {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.rail-cell-candidates {
+  font-size: 9px;
+  color: #6d7388;
+  white-space: nowrap;
+}
+
+.rail-cell.is-past {
+  background: #14161d;
+  color: var(--past);
+}
+
+.rail-cell.is-past .rail-cell-symbol {
+  color: var(--past);
+}
+
+.rail-cell.is-active {
+  background: #2a2437;
+  color: var(--amber);
+  box-shadow: inset 0 0 0 1px var(--amber);
+}
+
+.rail-cell.is-active .rail-cell-symbol {
+  color: var(--amber);
+  font-size: 20px;
+}
+
+.rail-cell.is-editable:hover {
+  border-right-color: var(--accent);
+}
+
+.rail-keyband {
+  position: absolute;
+  top: 26px;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(123, 140, 255, 0.1), rgba(123, 140, 255, 0.02));
+  border-left: 1px solid rgba(123, 140, 255, 0.25);
+  pointer-events: none;
+}
+
+.rail-keyband-label {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-size: 9px;
+  color: #6b7bb5;
+}
+
+.rail-head {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--amber);
+  box-shadow: 0 0 8px rgba(242, 161, 60, 0.6);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.rail-bar {
+  position: absolute;
+  top: 22px;
+  bottom: 0;
+  width: 1px;
+  background: #3a3f52;
+  pointer-events: none;
+}
+
+.rail-flag {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: flex-start;
+  padding: 0 2px;
+  border: 0;
+  border-left: 2px solid currentColor;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  overflow: visible;
+}
+
+.rail-flag.strength-strong {
+  color: var(--amber);
+}
+
+.rail-flag.strength-medium {
+  color: #9fb0e6;
+}
+
+.rail-flag.strength-weak {
+  color: #6f7488;
+}
+
+.rail-flag.flag-detected {
+  border-left-style: dashed;
+}
+
+.rail-flag.flag-weak {
+  opacity: 0.5;
+}
+
+.rail-flag-label {
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  font-size: 9px;
+  line-height: 1.2;
+  white-space: nowrap;
+  background: rgba(18, 19, 26, 0.82);
+  padding: 0 3px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.upper-zoom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+  font-size: 11px;
+  color: var(--text-dim);
+  flex: 0 0 auto;
+}
+
+.upper-meta {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------ 鍵盤 */
+.lower {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+  padding: 6px 8px 2px;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.keyboard-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
+}
+
+.keyboard-inner {
+  position: relative;
+}
+
+.key {
+  position: absolute;
+  top: 0;
+  padding: 0;
+  border: 1px solid #3a3f52;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  transition: background 0.06s;
+}
+
+.key-white {
+  background: linear-gradient(180deg, #e9ebf2 0%, #cfd3de 100%);
+  color: #3a3f52;
+  z-index: 1;
+  border-radius: 0 0 4px 4px;
+}
+
+.key-black {
+  background: linear-gradient(180deg, #262a36 0%, #14161d 100%);
+  color: #b9bfd0;
+  z-index: 2;
+  border-radius: 0 0 3px 3px;
+}
+
+.key-white.is-chord-tone {
+  background: linear-gradient(180deg, #d6f0ec 0%, #b3ded7 100%);
+}
+
+.key-black.is-chord-tone {
+  background: linear-gradient(180deg, #1f4a48 0%, #14302f 100%);
+}
+
+.key-white.is-expected {
+  background: linear-gradient(180deg, #9df0e6 0%, #4fc9ba 100%);
+}
+
+.key-black.is-expected {
+  background: linear-gradient(180deg, #1d7a71 0%, #0f4c47 100%);
+}
+
+/* 両方重なる鍵は琥珀を優先。 */
+.key.is-active,
+.key-white.is-active {
+  background: linear-gradient(180deg, #ffd79a 0%, var(--amber) 100%);
+}
+
+.key-black.is-active {
+  background: linear-gradient(180deg, #8a5a1c 0%, #5c3a0f 100%);
+}
+
+.key.is-wrong,
+.key-white.is-wrong {
+  background: linear-gradient(180deg, #ff9ea1 0%, var(--red) 100%);
+}
+
+.key-black.is-wrong {
+  background: linear-gradient(180deg, #7a2226 0%, #4d1417 100%);
+}
+
+.key-white.is-afterglow {
+  box-shadow: inset 0 0 0 2px rgba(242, 161, 60, 0.75);
+}
+
+.key-black.is-afterglow {
+  box-shadow: inset 0 0 0 2px rgba(242, 161, 60, 0.9);
+}
+
+.key-degree {
+  font-size: 9px;
+  opacity: 0.8;
+}
+
+.key-name {
+  font-size: 9px;
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.keyboard-hint {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-dim);
+  padding: 0 2px 2px;
+}
+
+/* ------------------------------------------------------------ 楽譜 (従) */
+.staff {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 18px;
+}
+
+.staff-scroll {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.staff-inner {
+  position: relative;
+}
+
+.staff-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 9px;
+  border-bottom: 1px solid #1e212b;
+}
+
+.staff-row.is-c {
+  border-bottom-color: #2a2e3c;
+  background: rgba(123, 140, 255, 0.04);
+}
+
+.staff-octave {
+  position: absolute;
+  left: 2px;
+  top: -1px;
+  font-size: 8px;
+  color: #5c6274;
+}
+
+.staff-note {
+  position: absolute;
+  height: 6px;
+  border-radius: 3px;
+}
+
+.staff-note-sample {
+  background: var(--teal);
+}
+
+.staff-note-user {
+  background: var(--amber);
+}
+
+.staff-note-import {
+  background: var(--accent);
+}
+
+.staff-cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--amber);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.staff-event {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  border-left: 1px dashed #9fb0e6;
+  pointer-events: none;
+}
+
+.staff-chord-label {
+  position: absolute;
+  top: -14px;
+  font-size: 10px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.staff-hint {
+  font-size: 10px;
+  color: var(--text-dim);
+  padding: 2px 4px;
+}
+
+/* ------------------------------------------------------------ 解析 */
+.analyze {
+  flex: 0 0 auto;
+  max-height: 46%;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.analyze-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--text-dim);
+  flex-wrap: wrap;
+}
+
+.analyze-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.analyze-controls input[type='text'] {
+  width: 110px;
+}
+
+.analyze-check {
+  cursor: pointer;
+}
+
+.analyze-body {
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.analyze-chords,
+.analyze-events {
+  flex: 1 1 50%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.analyze-events {
+  border-left: 1px solid var(--line);
+}
+
+.analyze-head {
+  padding: 5px 10px;
+  font-size: 11px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--line);
+}
+
+.analyze-note {
+  margin: 0;
+  padding: 4px 10px;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.chord-list,
+.event-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 6px 8px;
+  overflow-y: auto;
+}
+
+.chord-row {
+  display: grid;
+  grid-template-columns: 84px 84px 44px 44px 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.chord-row:hover {
+  background: var(--bg-3);
+}
+
+.chord-row.is-selected {
+  background: #2c3350;
+}
+
+.chord-row-bar,
+.chord-row-conf,
+.chord-row-roman {
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.chord-row-symbol {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.chord-row-symbol.is-diatonic {
+  color: var(--teal);
+}
+
+.chord-row-cands {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.cand {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.event-row {
+  display: grid;
+  grid-template-columns: 84px 46px 1fr 40px;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  font-size: 11px;
+}
+
+.event-chip {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 9px;
+  border: 1px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+}
+
+.event-chip.flag-modulation,
+.event-chip.flag-author {
+  color: var(--amber);
+}
+
+.event-chip.flag-detected {
+  border-style: dashed;
+}
+
+.event-chip.flag-tonicization {
+  color: #6f7488;
+}
+
+.event-chip.flag-cadence,
+.event-chip.flag-meter {
+  color: #9fb0e6;
+}
+
+.event-time,
+.event-conf {
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------ 状態バー */
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 10px;
+  background: var(--bg-2);
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.statusbar span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusbar-right {
+  flex: 0 0 auto;
+}
