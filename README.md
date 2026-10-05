@@ -1,5 +1,10 @@
 # Theory Desk
 
+[![Deploy to GitHub Pages](https://github.com/gadget114514/MusicTheory/actions/workflows/pages.yml/badge.svg)](https://github.com/gadget114514/MusicTheory/actions/workflows/pages.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+
+> 🎹 **Live Demo (GitHub Pages): https://gadget114514.github.io/MusicTheory/**
+
 音楽理論・演奏・録音・自動再生を 1 画面で扱う机上。
 
 Electron デスクトップアプリと、GitHub Pages に載せる静的 Web 版のどちらでも動きます。
@@ -31,6 +36,8 @@ npm run typecheck  # 型検査
 `npm run build:web` の出力 (`dist-web/`) はそのまま GitHub Pages に載せられます。
 
 ### GitHub Pages
+
+🌐 公開 URL: **https://gadget114514.github.io/MusicTheory/**
 
 `.github/workflows/pages.yml` が `main` への push で `dist-web/` を公開します。
 Electron の実行ファイルは Pages 側で不要なので `ELECTRON_SKIP_BINARY_DOWNLOAD=1` を指定しています。
