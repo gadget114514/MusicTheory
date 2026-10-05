@@ -3,9 +3,10 @@
  * 五線レンダラは自前で書かない。「MIDI の音符を拍位置に置いた簡略表示」で足りる。
  * カーソルは再生拍から計算し、再描画に同期を預けない。
  */
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import type { ChordEvent, NoteEvent, ScoreEvent } from '@/model/types'
 import { beatsPerBar } from '@/model/types'
+import { transport } from '@/engine/transport'
 import { noteName } from './Keyboard'
 import { useAnimationFrame } from './usePlayhead'
 
@@ -17,6 +18,9 @@ interface Props {
   timeSig: [number, number]
   /** 「コード + 楽譜」でもレールの歌詞を出すか。 */
   showChordLabels: boolean
+  follow: boolean
+  onFollowChange?(follow: boolean): void
+  onZoom?(pxPerBeat: number): void
 }
 
 const ROW_H = 9
@@ -28,10 +32,33 @@ export function StaffView({
   pxPerBeat,
   timeSig,
   showChordLabels,
+  follow,
+  onFollowChange,
+  onZoom,
 }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
+  const programmatic = useRef(false)
+  const prevPx = useRef(pxPerBeat)
   const barBeats = beatsPerBar(timeSig)
+
+  // Ctrl+ホイールでズーム。React の onWheel は passive のため native で拾う。
+  const zoomRef = useRef(onZoom)
+  zoomRef.current = onZoom
+  const pxRef = useRef(pxPerBeat)
+  pxRef.current = pxPerBeat
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const handler = (e: WheelEvent) => {
+      if (!(e.ctrlKey || e.metaKey)) return
+      e.preventDefault()
+      const delta = e.deltaY > 0 ? -8 : 8
+      zoomRef.current?.(Math.min(200, Math.max(16, pxRef.current + delta)))
+    }
+    el.addEventListener('wheel', handler, { passive: false })
+    return () => el.removeEventListener('wheel', handler)
+  }, [])
 
   const bounds = useMemo(() => {
     if (notes.length === 0) return { low: 48, high: 72 }
@@ -55,22 +82,65 @@ export function StaffView({
   const rows = bounds.high - bounds.low + 1
   const height = rows * ROW_H
 
+  useEffect(() => {
+    const el = scrollRef.current
+    const prev = prevPx.current
+    prevPx.current = pxPerBeat
+    if (!el || prev === pxPerBeat) return
+    programmatic.current = true
+    el.scrollLeft = (el.scrollLeft / prev) * pxPerBeat
+    requestAnimationFrame(() => {
+      programmatic.current = false
+    })
+  }, [pxPerBeat])
+
   useAnimationFrame((beat) => {
     const cursor = cursorRef.current
     if (cursor) cursor.style.transform = `translateX(${beat * pxPerBeat}px)`
+    if (!follow) return
+    if (transport.transportState !== 'started') return
     const el = scrollRef.current
     if (!el) return
     const x = beat * pxPerBeat
     const margin = el.clientWidth * 0.4
-    if (x - margin > el.scrollLeft && x - margin < el.scrollLeft + el.clientWidth) return
-    el.scrollTo({ left: Math.max(0, x - margin), behavior: 'smooth' })
+    const target = Math.max(0, x - margin)
+    if (target > el.scrollLeft - 2 && target < el.scrollLeft + 2) return
+    if (x > el.scrollLeft && x < el.scrollLeft + el.clientWidth) return
+    programmatic.current = true
+    el.scrollTo({ left: target, behavior: 'auto' })
+    requestAnimationFrame(() => {
+      programmatic.current = false
+    })
   })
+
+  const handleScroll = () => {
+    if (programmatic.current) return
+    if (follow && transport.transportState === 'started') onFollowChange?.(false)
+  }
+
+  const jumpToHead = () => {
+    const el = scrollRef.current
+    if (!el) return
+    onFollowChange?.(true)
+    programmatic.current = true
+    el.scrollTo({ left: Math.max(0, transport.beat * pxPerBeat - el.clientWidth * 0.4) })
+    requestAnimationFrame(() => {
+      programmatic.current = false
+    })
+  }
 
   const yOf = (midi: number) => (bounds.high - midi) * ROW_H + ROW_H / 2
 
   return (
     <div className="staff">
-      <div className="staff-scroll" ref={scrollRef}>
+      <div className="staff-tools">
+        {!follow ? (
+          <button type="button" className="btn btn-tiny" onClick={jumpToHead} title="再生ヘッドに追従を戻す">
+            ▸ 追従に戻す
+          </button>
+        ) : null}
+      </div>
+      <div className="staff-scroll" ref={scrollRef} onScroll={handleScroll}>
         <div className="staff-inner" style={{ width, height: height + 22 }}>
           {showChordLabels
             ? chords.map((chord) => (

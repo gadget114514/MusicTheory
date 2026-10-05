@@ -14,10 +14,10 @@ import { transport } from '@/engine/transport'
 import { degreesOfKey, pitchClassOf, type KeyRef } from '@/theory'
 
 const BLACK = new Set([1, 3, 6, 8, 10])
-const WHITE_W = 34
-const BLACK_W = 20
-const WHITE_H = 168
-const BLACK_H = 104
+const WHITE_W = 44
+const BLACK_W = 26
+const WHITE_H = 192
+const BLACK_H = 120
 
 export interface KeyboardLights {
   /** 鳴っている (琥珀)。押鍵 + 再生中の Part。 */
@@ -109,17 +109,23 @@ export function Keyboard({ lights }: Props) {
               classes.push('is-chord-tone')
             }
             if (key.midi === lights.afterglow) classes.push('is-afterglow')
-            // degrees はピッチクラス名 ("C", "Db") で引ける。
+            // degrees はピッチクラス名 ("C", "Db") で引ける。密度向上のため常時表示する。
+            // Tutorial 中は濃く、それ以外は薄く出す。
             const pcName = pitchClassOf(key.midi)
-            const degree = lights.showDegrees ? degrees[pcName] : undefined
-            if (degree) classes.push('has-degree')
+            const degree = degrees[pcName]
+            const kbd = inputRouter.labelForMidi(key.midi)
+            if (degree && lights.showDegrees) classes.push('has-degree')
 
             return (
               <button
                 key={key.midi}
                 type="button"
                 className={classes.join(' ')}
-                style={{ left: key.left, height: key.black ? BLACK_H : WHITE_H }}
+                style={{
+                  left: key.left,
+                  width: key.black ? BLACK_W : WHITE_W,
+                  height: key.black ? BLACK_H : WHITE_H,
+                }}
                 aria-label={noteName(key.midi)}
                 onPointerDown={(e) => {
                   e.preventDefault()
@@ -129,10 +135,15 @@ export function Keyboard({ lights }: Props) {
                 onPointerLeave={() => release(key.midi)}
                 onPointerCancel={() => release(key.midi)}
               >
-                {degree ? <span className="key-degree">{degree}</span> : null}
-                {pcName === 'C' && !key.black ? (
-                  <span className="key-name">C{Math.floor(key.midi / 12) - 1}</span>
+                {kbd ? <span className="key-kbd">{kbd}</span> : null}
+                {degree ? (
+                  <span className={`key-degree${lights.showDegrees ? '' : ' is-dim'}`}>{degree}</span>
                 ) : null}
+                {key.black ? (
+                  <span className="key-name is-black">{pcName}</span>
+                ) : (
+                  <span className="key-name">{noteName(key.midi)}</span>
+                )}
               </button>
             )
           })}

@@ -3,11 +3,18 @@ import { AnalyzePanel } from '@/ui/AnalyzePanel'
 import { ChordRail } from '@/ui/ChordRail'
 import { GuideRail } from '@/ui/GuideRail'
 import { Keyboard } from '@/ui/Keyboard'
+import { SongBuilder } from '@/ui/SongBuilder'
 import { StaffView } from '@/ui/StaffView'
 import { TopBar } from '@/ui/TopBar'
 import { useAnimationFrame } from '@/ui/usePlayhead'
 import { useActiveMidis, useBeatLabel, useNowChord } from '@/ui/live'
 import { allNotesOff, markTransportOrigin, noteOff, noteOn, setMetronome as applyMetronome } from '@/engine/audio'
+import {
+  auditionChord,
+  auditionProgression,
+  midisForSymbol,
+  stopAudition as stopChordAudition,
+} from '@/engine/chordAudition'
 import { inputRouter, type MidiStatus } from '@/engine/input'
 import { player } from '@/engine/player'
 import { recorder } from '@/engine/recorder'
@@ -16,15 +23,18 @@ import { analyzeNotes, keyLabel, midiToNotes, readMidiBytes, trackSummaries } fr
 import { detectScoreEvents, eventSentence, mergeEvents, resolveOrMakeKey, shouldGuide } from '@/analysis/events'
 import { platform } from '@/platform'
 import { lessonById, lessons, migrateScore, sampleById, samples } from '@/samples'
-import { useStore } from '@/store/score'
+import { newChordEvent, useStore } from '@/store/score'
+import type { ProgressionChoice } from '@/theory/progression'
 import * as theoryApi from '@/theory'
 import { chordPitchClasses, describeSymbol, expectedMidis } from '@/theory'
 import { listeningLabel, tutorialRunner } from '@/tutorial/runner'
 import {
   beatsPerBar,
   createEmptyScore,
+  makeId,
   type AppMode,
   type ChordEvent,
+  type NoteEvent,
   type ScoreDocument,
   type ScoreEvent,
   type UpperView,
@@ -71,6 +81,11 @@ export function App() {
   const [selectedChordId, setSelectedChordId] = useState<string | null>(null)
   const [transient, setTransient] = useState<{ text: string; key: string; until: number } | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
+  const [follow, setFollow] = useState(true)
+  const [auditionChordId, setAuditionChordId] = useState<string | null>(null)
+  const [scoreAuditioning, setScoreAuditioning] = useState(false)
+  const [songOpen, setSongOpen] = useState(true)
+  const auditionTimer = useRef<number | null>(null)
 
   const store = useStore.getState
   const mode = state.mode
@@ -104,6 +119,9 @@ export function App() {
 
   // ------------------------------------------------------------- 再生
   const play = useCallback(async () => {
+    stopChordAudition()
+    setScoreAuditioning(false)
+    setAuditionChordId(null)
     await transport.unlock()
     markTransportOrigin()
     player.startParts()
@@ -119,6 +137,9 @@ export function App() {
   }, [])
 
   const stop = useCallback(() => {
+    stopChordAudition()
+    setScoreAuditioning(false)
+    setAuditionChordId(null)
     transport.stop()
     player.stopParts()
     allNotesOff()
@@ -370,6 +391,9 @@ export function App() {
   // ------------------------------------------------------------- ファイル操作
   const loadScore = useCallback((next: ScoreDocument, name: string | null, path: string | null) => {
     const s = useStore.getState()
+    stopChordAudition()
+    setScoreAuditioning(false)
+    setAuditionChordId(null)
     transport.stop()
     player.stopParts()
     setPlaying(false)
@@ -541,6 +565,107 @@ export function App() {
     setNotice(`${event.label}: この旗で止める = ${!event.pauseOnPass}`)
   }, [])
 
+  // ------------------------------------------------------------- 和音の試聴・作曲
+  const clearAuditionHighlight = useCallback(() => {
+    if (auditionTimer.current !== null) {
+      window.clearTimeout(auditionTimer.current)
+      auditionTimer.current = null
+    }
+    setAuditionChordId(null)
+  }, [])
+
+  const handleAuditionChord = useCallback(
+    (chord: ChordEvent) => {
+      if (!chord.symbol) return
+      setScoreAuditioning(false)
+      auditionChord(chord.symbol, 1.2)
+      setAuditionChordId(chord.id)
+      if (auditionTimer.current !== null) window.clearTimeout(auditionTimer.current)
+      auditionTimer.current = window.setTimeout(() => setAuditionChordId(null), 1300)
+    },
+    [],
+  )
+
+  const handleScoreProgression = useCallback(() => {
+    const s = useStore.getState()
+    const chords = s.score.chords.filter((c) => c.symbol)
+    if (chords.length === 0) {
+      setNotice('鳴らせる和音がありません。作曲パネルで並べてください。')
+      return
+    }
+    setScoreAuditioning(true)
+    auditionProgression(chords, s.score.meta.bpm, {
+      onChord: (chord) => {
+        setAuditionChordId(chord.id)
+        // 停止中に進行を鳴らすときはヘッドも追従させる。
+        if (transport.transportState !== 'started' && !s.seekLocked) {
+          transport.seek(chord.time)
+          markTransportOrigin()
+        }
+      },
+      onDone: () => {
+        setScoreAuditioning(false)
+        setAuditionChordId(null)
+      },
+    })
+    setNotice(`進行を試聴中: ${chords.length}和音`)
+  }, [])
+
+  const handleStopAudition = useCallback(() => {
+    stopChordAudition()
+    setScoreAuditioning(false)
+    clearAuditionHighlight()
+  }, [clearAuditionHighlight])
+
+  const applyProgression = useCallback(
+    (entries: ProgressionChoice[], applyMode: 'append' | 'replace') => {
+      const s = useStore.getState()
+      const clean = entries.filter((e) => e.symbol)
+      if (clean.length === 0) return
+      const bar = beatsPerBar(s.score.meta.timeSig)
+      const startBeat =
+        applyMode === 'append'
+          ? Math.ceil(
+              Math.max(
+                bar,
+                s.score.chords.reduce((m, c) => Math.max(m, c.time + c.duration), 0),
+              ) / bar,
+            ) * bar
+          : 0
+      const newChords: ChordEvent[] = clean.map((e, i) => ({
+        ...newChordEvent(startBeat + i * bar, bar, e.symbol),
+        roman: e.roman,
+        candidates: [e.symbol],
+        confidence: 1,
+      }))
+      const newNotes: NoteEvent[] = []
+      clean.forEach((e, i) => {
+        const time = startBeat + i * bar
+        for (const midi of midisForSymbol(e.symbol, 60)) {
+          newNotes.push({
+            id: makeId('n'),
+            time,
+            duration: Math.max(0.5, bar * 0.95),
+            midi,
+            velocity: midi < 50 ? 84 : 72,
+            source: 'sample',
+          })
+        }
+      })
+      if (applyMode === 'append') {
+        s.setChords([...s.score.chords, ...newChords])
+        s.addNotes(newNotes)
+        setNotice(`${clean.length}和音を末尾に追加しました。Space で再生できます。`)
+      } else {
+        const keepUser = s.score.notes.filter((n) => n.source === 'user')
+        s.setChords(newChords)
+        s.replaceNotes([...keepUser, ...newNotes])
+        setNotice(`${clean.length}和音でスコアを置き換えました。`)
+      }
+    },
+    [],
+  )
+
   // ------------------------------------------------------------- Tutorial
   const onListen = useCallback(() => void tutorialRunner.listen(), [])
   const onTry = useCallback(() => tutorialRunner.tryIt(), [])
@@ -631,11 +756,17 @@ export function App() {
                 events={score.events}
                 pxPerBeat={pxPerBeat}
                 timeSig={score.meta.timeSig}
+                totalBeats={totalBeats}
                 seekLocked={state.seekLocked}
                 mode={mode}
+                follow={follow}
+                onFollowChange={setFollow}
+                onZoom={(v) => useStore.getState().setRailZoom(v)}
                 onSeek={seek}
                 onSelectChord={(chord) => setSelectedChordId(chord.id)}
                 onEventClick={onEventClick}
+                onAuditionChord={handleAuditionChord}
+                auditionChordId={auditionChordId}
                 keySpans={keySpans}
               />
             ) : null}
@@ -653,6 +784,9 @@ export function App() {
                 pxPerBeat={pxPerBeat}
                 timeSig={score.meta.timeSig}
                 showChordLabels={state.upperView === 'staff'}
+                follow={follow}
+                onFollowChange={setFollow}
+                onZoom={(v) => useStore.getState().setRailZoom(v)}
               />
             </div>
           ) : null}
@@ -661,11 +795,20 @@ export function App() {
             <button
               type="button"
               className="btn btn-tiny"
-              onClick={() => state.setRailZoom(Math.max(24, pxPerBeat - 12))}
+              onClick={() => state.setRailZoom(Math.max(16, pxPerBeat - 12))}
             >
               −
             </button>
-            <span>{Math.round(pxPerBeat)} px/拍</span>
+            <input
+              type="range"
+              min={16}
+              max={200}
+              step={4}
+              value={pxPerBeat}
+              onChange={(e) => state.setRailZoom(Number(e.target.value))}
+              title="レールのズーム (Ctrl+ホイールでも可)"
+              className="zoom-slider"
+            />
             <button
               type="button"
               className="btn btn-tiny"
@@ -673,6 +816,50 @@ export function App() {
             >
               +
             </button>
+            <button
+              type="button"
+              className="btn btn-tiny"
+              onClick={() => {
+                const el = document.querySelector('.upper-rail') as HTMLElement | null
+                const w = el?.clientWidth ?? window.innerWidth - 360
+                const fit = Math.floor((w - 40) / Math.max(1, Math.ceil(totalBeats)))
+                state.setRailZoom(Math.min(200, Math.max(16, fit)))
+              }}
+              title="全体が収まる倍率にする"
+            >
+              全体
+            </button>
+            <button
+              type="button"
+              className={`btn btn-tiny${follow ? ' is-on' : ''}`}
+              onClick={() => setFollow(!follow)}
+              title="再生ヘッドへの自動追従。OFFで手動スクロール優先"
+            >
+              追従{follow ? '中' : '切'}
+            </button>
+            {scoreAuditioning ? (
+              <button type="button" className="btn btn-tiny" onClick={handleStopAudition}>
+                ■ 試聴停止
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-tiny"
+                onClick={handleScoreProgression}
+                title="スコアのコード進行を通しで鳴らす"
+              >
+                ▶ 進行を鳴らす
+              </button>
+            )}
+            <button
+              type="button"
+              className={`btn btn-tiny${songOpen ? ' is-on' : ''}`}
+              onClick={() => setSongOpen(!songOpen)}
+              title="和音選択・自動作曲パネルの表示切替"
+            >
+              作曲
+            </button>
+            <span>{Math.round(pxPerBeat)} px/拍</span>
             <span className="upper-meta">
               {MODE_LABEL[mode]} / 拍 {beatLabel.toFixed(1)} / 全 {Math.ceil(totalBeats)} 拍
               {state.recording ? ' / 録音中' : ''}
@@ -684,6 +871,15 @@ export function App() {
               </span>
             ) : null}
           </div>
+
+          {songOpen ? (
+            <SongBuilder
+              musicKey={displayKey}
+              bpm={score.meta.bpm}
+              barBeats={barBeats}
+              onApply={applyProgression}
+            />
+          ) : null}
 
           {mode === 'analyze' ? (
             <AnalyzePanel

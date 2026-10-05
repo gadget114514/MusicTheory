@@ -232,15 +232,38 @@ export function isInScale(pitchClass: string, scaleName: string): boolean {
   return scalePitchClasses(scaleName).includes(pitchClass)
 }
 
-/** 鍵の上に載せる度数 (1, b3, 5 ...)。 */
+/** 鍵の上に載せる度数 (1, b3, 5 ...)。主音からの相対で求める。 */
 export function degreesOfKey(key: KeyRef): Record<string, string> {
   const out: Record<string, string> = {}
   const tonicChroma = Note.chroma(key.tonic)
   if (tonicChroma < 0) return out
   const labels = key.mode === 'major' ? DEGREE_LABELS_MAJOR : DEGREE_LABELS_MINOR
+  // 異名同音 (C#/Db など) でも引けるよう、クロマごとに全表記へ割り当てる。
+  const spellings: Record<number, string[]> = {
+    0: ['C'],
+    1: ['C#', 'Db'],
+    2: ['D'],
+    3: ['D#', 'Eb'],
+    4: ['E'],
+    5: ['F'],
+    6: ['F#', 'Gb'],
+    7: ['G'],
+    8: ['G#', 'Ab'],
+    9: ['A'],
+    10: ['A#', 'Bb'],
+    11: ['B'],
+  }
+  for (let chroma = 0; chroma < 12; chroma += 1) {
+    const degree = labels[(((chroma - tonicChroma) % 12) + 12) % 12] ?? ''
+    for (const name of spellings[chroma] ?? []) out[name] = degree
+  }
+  // tonal の fromMidi が返す表記 ( flats 寄り ) も念のため入れる。
   for (let i = 0; i < 12; i += 1) {
     const pc = Note.pitchClass(Note.fromMidi(60 + i))
-    out[pc] = labels[i] ?? ''
+    const chroma = Note.chroma(pc)
+    if (chroma >= 0 && out[pc] === undefined) {
+      out[pc] = labels[(((chroma - tonicChroma) % 12) + 12) % 12] ?? ''
+    }
   }
   return out
 }
