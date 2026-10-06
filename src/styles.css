@@ -49,9 +49,14 @@ body {
   user-select: none;
 }
 
+/*
+ * 列は明示して 1 本だけにする。auto のままだと下半分の鍵盤 (幅 2288px) が
+ * max-content を持ち上げ、画面幅より広いグリッドになって画面外が切れない。
+ */
 .app {
   display: grid;
   grid-template-rows: var(--topbar-h) 1fr auto 24px;
+  grid-template-columns: minmax(0, 1fr);
   height: 100%;
 }
 
@@ -751,6 +756,64 @@ input[type='number'] {
   padding-top: 6px;
 }
 
+.song-row.builder {
+  align-items: flex-start;
+  border-top: 1px dashed var(--line);
+  padding-top: 6px;
+}
+
+.builder-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.builder-group {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.builder-caption {
+  flex: 0 0 auto;
+  font-size: 11px;
+  color: var(--text-dim);
+  min-width: 36px;
+  padding-top: 4px;
+}
+
+.builder-btns {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.builder-preview {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-3);
+  width: fit-content;
+  max-width: 100%;
+}
+
+.builder-symbol {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.builder-tones {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
 .upper-meta {
   font-variant-numeric: tabular-nums;
 }
@@ -758,6 +821,7 @@ input[type='number'] {
 /* ------------------------------------------------------------ 鍵盤 */
 .lower {
   flex: 0 0 auto;
+  min-width: 0;
   border-top: 1px solid var(--line);
   background: var(--bg-2);
   padding: 6px 8px 2px;
@@ -767,9 +831,12 @@ input[type='number'] {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .keyboard-scroll {
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 4px;
@@ -793,16 +860,18 @@ input[type='number'] {
   transition: background 0.06s;
 }
 
+/* 白鍵は白。ピアノの白鍵と同じ明度で、上の縁だけわずかに陰影を付ける。 */
 .key-white {
-  background: linear-gradient(180deg, #e9ebf2 0%, #cfd3de 100%);
-  color: #3a3f52;
+  background: linear-gradient(180deg, #ffffff 0%, #e4e8f0 100%);
+  color: #2b3140;
   z-index: 1;
   border-radius: 0 0 4px 4px;
 }
 
+/* 黒鍵は黒。白鍵との差がはっきり出るようにする。文字は白で読ませる。 */
 .key-black {
-  background: linear-gradient(180deg, #262a36 0%, #14161d 100%);
-  color: #b9bfd0;
+  background: linear-gradient(180deg, #2b2e36 0%, #0d0e12 100%);
+  color: #f2f5fa;
   z-index: 2;
   border-radius: 0 0 3px 3px;
 }
@@ -870,8 +939,22 @@ input[type='number'] {
   pointer-events: none;
 }
 
+/* 黒鍵の上の文字は黒地に白で読ませる。白鍵の上の文字は逆に地色つき。 */
 .key-black .key-kbd {
-  color: #b9bfd0;
+  color: #f2f5fa;
+  opacity: 0.8;
+}
+
+.key-black .key-degree {
+  opacity: 0.95;
+}
+
+.key-black .key-degree.is-dim {
+  opacity: 0.55;
+}
+
+.key-black .key-name {
+  opacity: 0.85;
 }
 
 .key-name.is-black {

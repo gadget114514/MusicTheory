@@ -16,7 +16,19 @@ import {
   PROGRESSION_PRESETS,
   type ProgressionChoice,
 } from '@/theory/progression'
-import type { KeyRef } from '@/theory'
+import {
+  buildChordSymbol,
+  CHORD_BUILDER_QUALITIES,
+  CHORD_BUILDER_ROOTS,
+  displayChordSymbol,
+} from '@/theory/chordBuilder'
+import {
+  chordPitchClasses,
+  describeSymbol,
+  isDiatonicChord,
+  romanNumeral,
+  type KeyRef,
+} from '@/theory'
 
 interface Props {
   musicKey: KeyRef
@@ -33,9 +45,34 @@ export function SongBuilder({ musicKey, bpm, barBeats, onApply }: Props) {
   )
   const [playingIndex, setPlayingIndex] = useState<number | null>(null)
   const [playingAll, setPlayingAll] = useState(false)
+  const [builderRoot, setBuilderRoot] = useState('C')
+  const [builderQuality, setBuilderQuality] = useState('M')
 
   const palette = useMemo(() => diatonicChoices(musicKey), [musicKey])
   const borrowed = useMemo(() => borrowedChoices(musicKey), [musicKey])
+
+  const builderSymbol = useMemo(
+    () => buildChordSymbol(builderRoot, builderQuality),
+    [builderRoot, builderQuality],
+  )
+  const builderDisplay = useMemo(
+    () => displayChordSymbol(builderRoot, builderQuality),
+    [builderRoot, builderQuality],
+  )
+  const builderTones = useMemo(
+    () => (builderSymbol ? chordPitchClasses(builderSymbol) : []),
+    [builderSymbol],
+  )
+  const builderValid = builderTones.length > 0
+
+  const addBuilderToProgression = () => {
+    if (!builderValid) return
+    const roman = romanNumeral(builderSymbol, musicKey) ?? builderQuality
+    setProgression([
+      ...progression,
+      { symbol: builderSymbol, roman, diatonic: isDiatonicChord(builderSymbol, musicKey) },
+    ])
+  }
 
   useEffect(() => () => stopAudition(), [])
 
@@ -141,6 +178,76 @@ export function SongBuilder({ musicKey, bpm, barBeats, onApply }: Props) {
               </button>
             </span>
           ))}
+        </div>
+      </div>
+
+      <div className="song-row builder">
+        <span className="song-label">和音を作る (ルート×響き)</span>
+        <div className="builder-groups">
+          <div className="builder-group">
+            <span className="builder-caption">ルート</span>
+            <div className="builder-btns">
+              {CHORD_BUILDER_ROOTS.map((root) => (
+                <button
+                  key={root}
+                  type="button"
+                  className={`btn btn-small${builderRoot === root ? ' is-on' : ''}`}
+                  onClick={() => setBuilderRoot(root)}
+                  title={`${root} をルートにする`}
+                >
+                  {root}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="builder-group">
+            <span className="builder-caption">響き</span>
+            <div className="builder-btns">
+              {CHORD_BUILDER_QUALITIES.map((q) => (
+                <button
+                  key={q.label}
+                  type="button"
+                  className={`btn btn-small${builderQuality === q.label ? ' is-on' : ''}`}
+                  onClick={() => setBuilderQuality(q.label)}
+                  title={
+                    q.label === q.suffix
+                      ? `${builderRoot}${q.suffix} にする`
+                      : `${builderRoot}${q.label} (実体 ${builderRoot}${q.suffix}) にする`
+                  }
+                >
+                  {q.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="builder-preview">
+            <span className="builder-symbol" title={builderValid ? describeSymbol(builderSymbol) : '鳴らせない組み合わせ'}>
+              {builderDisplay !== builderSymbol
+                ? `${builderDisplay} → ${builderSymbol}`
+                : builderSymbol}
+            </span>
+            <span className="builder-tones">
+              {builderValid ? builderTones.join(' ') : '—'}
+            </span>
+            <button
+              type="button"
+              className="btn btn-small"
+              onClick={() => playSingle(builderSymbol)}
+              disabled={!builderValid}
+              title={`${builderSymbol} を試聴`}
+            >
+              鳴らす
+            </button>
+            <button
+              type="button"
+              className="btn btn-tiny"
+              onClick={addBuilderToProgression}
+              disabled={!builderValid}
+              title={`${builderSymbol} を進行に追加`}
+            >
+              進行に追加 +
+            </button>
+          </div>
         </div>
       </div>
 
