@@ -32,6 +32,7 @@ interface Props {
   onMode(mode: AppMode): void
   onPlay(): void
   onStop(): void
+  onReturn(): void
   onBpm(value: number): void
   onLoop(enabled: boolean): void
   onMetronome(value: boolean): void
@@ -61,6 +62,14 @@ export function TopBar(props: Props) {
   return (
     <header className="topbar" onClick={(e) => e.stopPropagation()}>
       <div className="topbar-group">
+        <button
+          type="button"
+          className="btn btn-icon"
+          onClick={props.onReturn}
+          title="先頭に戻る (Home)"
+        >
+          ⏮
+        </button>
         <button
           type="button"
           className="btn btn-icon"

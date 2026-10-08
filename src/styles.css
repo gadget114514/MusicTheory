@@ -478,8 +478,8 @@ input[type='number'] {
 .rail-audition {
   position: absolute;
   top: 2px;
-  right: 2px;
-  z-index: 3;
+  right: 8px;
+  z-index: 5;
   width: 22px;
   height: 20px;
   padding: 0;
@@ -490,7 +490,7 @@ input[type='number'] {
   border-radius: 4px;
   color: var(--teal);
   cursor: pointer;
-  opacity: 0;
+  opacity: 0.75;
 }
 
 .rail-cell-wrap:hover .rail-audition {
@@ -554,6 +554,57 @@ input[type='number'] {
   border-right-color: var(--accent);
 }
 
+/* 縮小表示では補助テキストを畳んでシンボルだけにする。 */
+.rail-compact .rail-cell-candidates,
+.rail-compact .rail-cell-roman {
+  display: none;
+}
+
+.rail-compact .rail-cell-symbol {
+  font-size: 12px;
+}
+
+.rail-compact .rail-cell.is-active .rail-cell-symbol {
+  font-size: 13px;
+}
+
+.rail-compact .rail-audition {
+  width: 18px;
+  height: 16px;
+  font-size: 9px;
+}
+
+.rail-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  width: 10px;
+  bottom: 0;
+  z-index: 4;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.rail-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 4px;
+  width: 2px;
+  border-radius: 1px;
+  background: transparent;
+  transition: background 0.12s;
+}
+
+.rail-cell-wrap:hover .rail-resize-handle::after {
+  background: #454b63;
+}
+
+.rail-cell-wrap.is-resizing .rail-resize-handle::after {
+  background: var(--accent);
+}
+
 .rail-keyband {
   position: absolute;
   top: 26px;
@@ -579,8 +630,20 @@ input[type='number'] {
   margin-left: -1px;
   background: var(--amber);
   box-shadow: 0 0 8px rgba(242, 161, 60, 0.6);
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: ew-resize;
   will-change: transform;
+  z-index: 6;
+}
+
+.rail-head::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -7px;
+  width: 16px;
+  cursor: ew-resize;
 }
 
 .rail-bar {
@@ -981,6 +1044,8 @@ input[type='number'] {
   top: 0;
   right: 6px;
   z-index: 5;
+  display: flex;
+  gap: 4px;
 }
 
 /* ------------------------------------------------------------ 楽譜 (従) */
@@ -1048,8 +1113,20 @@ input[type='number'] {
   bottom: 0;
   width: 1px;
   background: var(--amber);
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: ew-resize;
   will-change: transform;
+  z-index: 3;
+}
+
+.staff-cursor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -7px;
+  width: 16px;
+  cursor: ew-resize;
 }
 
 .staff-event {

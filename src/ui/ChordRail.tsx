@@ -19,7 +19,10 @@ export interface ChordRailLayout {
   beats: number
 }
 
-const MIN_CELL_W = 44
+export const RAIL_ZOOM_MIN = 8
+export const RAIL_ZOOM_MAX = 200
+
+const MIN_CELL_W = 12
 
 export function layoutChords(
   chords: ChordEvent[],
@@ -57,6 +60,8 @@ interface Props {
   onSelectChord?(chord: ChordEvent): void
   onEventClick?(event: ScoreEvent): void
   onAuditionChord?(chord: ChordEvent): void
+  /** ドラッグで変えた長さ (拍) を受け取る。App 側で updateChord する。 */
+  onResizeChord?(id: string, duration: number): void
   /** 試聴中のコード。セルを強調する。 */
   auditionChordId?: string | null
   /** 現在キーの区間。背景淡色をキーごとにずらす。 */
@@ -78,6 +83,7 @@ export function ChordRail({
   onSelectChord,
   onEventClick,
   onAuditionChord,
+  onResizeChord,
   auditionChordId,
   keySpans,
 }: Props) {
@@ -107,7 +113,7 @@ export function ChordRail({
       if (!(e.ctrlKey || e.metaKey)) return
       e.preventDefault()
       const delta = e.deltaY > 0 ? -8 : 8
-      zoomRef.current?.(Math.min(200, Math.max(16, pxRef.current + delta)))
+      zoomRef.current?.(Math.min(RAIL_ZOOM_MAX, Math.max(RAIL_ZOOM_MIN, pxRef.current + delta)))
     }
     el.addEventListener('wheel', handler, { passive: false })
     return () => el.removeEventListener('wheel', handler)
@@ -180,6 +186,47 @@ export function ChordRail({
     })
   }
 
+  // ---------------------------------------------------------- タイムライン直操作
+  // 空き領域のクリック / ドラッグでシークする。カーソル (rail-head) 自体も掴める。
+  const innerRef = useRef<HTMLDivElement>(null)
+  const scrubbing = useRef(false)
+
+  const seekFromClientX = (clientX: number) => {
+    const inner = innerRef.current
+    if (!inner) return
+    const rect = inner.getBoundingClientRect()
+    const beat = Math.max(0, (clientX - rect.left) / (pxRef.current || 1))
+    onSeek(beat)
+  }
+
+  const handleInnerPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (seekLocked || resizingId !== null || scrubbing.current) return
+    const t = e.target as HTMLElement
+    if (t.closest('button, .rail-resize-handle, .rail-flag, .rail-audition')) return
+    scrubbing.current = true
+    e.currentTarget.setPointerCapture(e.pointerId)
+    seekFromClientX(e.clientX)
+  }
+
+  const handleInnerPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!scrubbing.current) return
+    seekFromClientX(e.clientX)
+  }
+
+  const handleInnerPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!scrubbing.current) return
+    scrubbing.current = false
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }
+    } catch {
+      /* 無視 */
+    }
+  }
+
+  const compact = pxPerBeat < 28
+
   const flagHeight: Record<ScoreEvent['kind'], number> = {
     modulation: 26,
     author: 26,
@@ -188,9 +235,87 @@ export function ChordRail({
     tonicization: 10,
   }
 
+  // ---------------------------------------------------------- 長さのドラッグ調整
+  // 右端ハンドルを掴んで横に引く。0.25 拍にスナップし、次の和音に重ならない。
+  const [resizingId, setResizingId] = useState<string | null>(null)
+  const resizeRef = useRef<{
+    id: string
+    startX: number
+    startDuration: number
+    maxDuration: number | null
+  } | null>(null)
+
+  const sortedByTime = useMemo(() => [...chords].sort((a, b) => a.time - b.time), [chords])
+
+  const beginResize = (e: React.PointerEvent<HTMLDivElement>, chord: ChordEvent) => {
+    if (!onResizeChord) return
+    e.stopPropagation()
+    e.preventDefault()
+    const next = sortedByTime.find((c) => c.time > chord.time)
+    const maxDuration = next ? Math.max(0.25, next.time - chord.time) : null
+    resizeRef.current = {
+      id: chord.id,
+      startX: e.clientX,
+      startDuration: chord.duration,
+      maxDuration,
+    }
+    setResizingId(chord.id)
+    e.currentTarget.setPointerCapture(e.pointerId)
+    document.body.style.cursor = 'ew-resize'
+  }
+
+  const moveResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    const r = resizeRef.current
+    if (!r || !onResizeChord) return
+    const px = pxRef.current || 1
+    const raw = r.startDuration + (e.clientX - r.startX) / px
+    let snapped = Math.round(raw * 4) / 4
+    if (r.maxDuration !== null) snapped = Math.min(snapped, r.maxDuration)
+    snapped = Math.max(0.25, snapped)
+    // 既に同じ値ならストアを叩かない。
+    const current = chords.find((c) => c.id === r.id)
+    if (!current || current.duration === snapped) return
+    onResizeChord(r.id, snapped)
+  }
+
+  const endResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (resizeRef.current) {
+      resizeRef.current = null
+      setResizingId(null)
+      document.body.style.cursor = ''
+    }
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }
+    } catch {
+      /* capture 済みでない場合は無視 */
+    }
+  }
+
   return (
-    <div className="rail">
+    <div className={`rail${compact ? ' rail-compact' : ''}`}>
       <div className="rail-tools">
+        {onZoom ? (
+          <>
+            <button
+              type="button"
+              className="btn btn-tiny"
+              onClick={() => onZoom(Math.max(RAIL_ZOOM_MIN, pxPerBeat - 12))}
+              title="ズームアウト (縮小して全体を見る)"
+            >
+              −
+            </button>
+            <button
+              type="button"
+              className="btn btn-tiny"
+              onClick={() => onZoom(Math.min(RAIL_ZOOM_MAX, pxPerBeat + 12))}
+              title="ズームイン (拡大する)"
+            >
+              ＋
+            </button>
+          </>
+        ) : null}
         {!follow ? (
           <button type="button" className="btn btn-tiny" onClick={jumpToHead} title="再生ヘッドに追従を戻す">
             ▸ 追従に戻す
@@ -207,7 +332,15 @@ export function ChordRail({
         )}
       </div>
       <div className="rail-scroll" ref={scrollRef} onScroll={handleScroll}>
-        <div className="rail-inner" style={{ width: layout.width }}>
+        <div
+          className="rail-inner"
+          ref={innerRef}
+          style={{ width: layout.width }}
+          onPointerDown={handleInnerPointerDown}
+          onPointerMove={handleInnerPointerMove}
+          onPointerUp={handleInnerPointerUp}
+          onPointerCancel={handleInnerPointerUp}
+        >
           {keySpans.map((span) => (
             <div
               key={`span-${span.start}`}
@@ -227,18 +360,22 @@ export function ChordRail({
             if (mode === 'analyze') classes.push('is-editable')
             if (isAudition) classes.push('is-audition')
             return (
-              <div key={chord.id} className="rail-cell-wrap" style={{ left, width }}>
+              <div
+                key={chord.id}
+                className={`rail-cell-wrap${resizingId === chord.id ? ' is-resizing' : ''}`}
+                style={{ left, width }}
+              >
                 <button
                   type="button"
                   className={classes.join(' ')}
                   style={{ width: '100%' }}
                   onClick={() => {
+                    if (resizingId !== null) return
                     if (seekLocked) return
                     onSeek(chord.time)
                     onSelectChord?.(chord)
                   }}
-                  onDoubleClick={() => onAuditionChord?.(chord)}
-                  title={`${chord.symbol || 'コードなし'} / ${chord.candidates.join(', ') || '候補なし'} (ダブルクリックで試聴)`}
+                  title={`${chord.symbol || 'コードなし'} / ${chord.candidates.join(', ') || '候補なし'} / 長さ ${chord.duration} 拍 (右端をドラッグで調整)`}
                 >
                   <span className="rail-cell-symbol">{chord.symbol || '—'}</span>
                   {chord.roman ? <span className="rail-cell-roman">{chord.roman}</span> : null}
@@ -259,6 +396,17 @@ export function ChordRail({
                   >
                     ♪
                   </button>
+                ) : null}
+                {onResizeChord ? (
+                  <div
+                    className="rail-resize-handle"
+                    onPointerDown={(e) => beginResize(e, chord)}
+                    onPointerMove={moveResize}
+                    onPointerUp={endResize}
+                    onPointerCancel={endResize}
+                    title={`長さ ${chord.duration} 拍。ドラッグで調整`}
+                    aria-label={`${chord.symbol || 'コード'}の長さを調整`}
+                  />
                 ) : null}
               </div>
             )

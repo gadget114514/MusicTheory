@@ -277,6 +277,13 @@ export function App() {
     setTransient(null)
   }, [])
 
+  const returnToStart = useCallback(() => {
+    if (useStore.getState().seekLocked) return
+    transport.seek(0)
+    markTransportOrigin()
+    setTransient(null)
+  }, [])
+
   useEffect(
     () =>
       transport.onTick(() => {
@@ -706,6 +713,7 @@ export function App() {
         onMode={setMode}
         onPlay={() => (playing ? pause() : void play())}
         onStop={stop}
+        onReturn={returnToStart}
         onBpm={(value) => {
           useStore.getState().setBpm(value)
           transport.setTempo(value)
@@ -766,6 +774,7 @@ export function App() {
                 onSelectChord={(chord) => setSelectedChordId(chord.id)}
                 onEventClick={onEventClick}
                 onAuditionChord={handleAuditionChord}
+                onResizeChord={(id, duration) => useStore.getState().updateChord(id, { duration })}
                 auditionChordId={auditionChordId}
                 keySpans={keySpans}
               />
@@ -787,24 +796,28 @@ export function App() {
                 follow={follow}
                 onFollowChange={setFollow}
                 onZoom={(v) => useStore.getState().setRailZoom(v)}
+                onSeek={seek}
+                seekLocked={state.seekLocked}
               />
             </div>
           ) : null}
 
           <div className="upper-zoom">
+            <span title="和音と楽譜の表示倍率">ズーム</span>
             <button
               type="button"
               className="btn btn-tiny"
-              onClick={() => state.setRailZoom(Math.max(16, pxPerBeat - 12))}
+              onClick={() => state.setRailZoom(Math.max(8, pxPerBeat - 12))}
+              title="ズームアウト (縮小して全体を見る)"
             >
               −
             </button>
             <input
               type="range"
-              min={16}
+              min={8}
               max={200}
               step={4}
-              value={pxPerBeat}
+              value={Math.min(200, Math.max(8, pxPerBeat))}
               onChange={(e) => state.setRailZoom(Number(e.target.value))}
               title="レールのズーム (Ctrl+ホイールでも可)"
               className="zoom-slider"
@@ -813,6 +826,7 @@ export function App() {
               type="button"
               className="btn btn-tiny"
               onClick={() => state.setRailZoom(Math.min(200, pxPerBeat + 12))}
+              title="ズームイン (拡大する)"
             >
               +
             </button>
@@ -823,7 +837,7 @@ export function App() {
                 const el = document.querySelector('.upper-rail') as HTMLElement | null
                 const w = el?.clientWidth ?? window.innerWidth - 360
                 const fit = Math.floor((w - 40) / Math.max(1, Math.ceil(totalBeats)))
-                state.setRailZoom(Math.min(200, Math.max(16, fit)))
+                state.setRailZoom(Math.min(200, Math.max(8, fit)))
               }}
               title="全体が収まる倍率にする"
             >

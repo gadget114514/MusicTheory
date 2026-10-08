@@ -16,8 +16,8 @@ import { degreesOfKey, pitchClassOf, type KeyRef } from '@/theory'
 const BLACK = new Set([1, 3, 6, 8, 10])
 const WHITE_W = 44
 const BLACK_W = 26
-const WHITE_H = 192
-const BLACK_H = 120
+const WHITE_H = 96
+const BLACK_H = 60
 
 export interface KeyboardLights {
   /** 鳴っている (琥珀)。押鍵 + 再生中の Part。 */

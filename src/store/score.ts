@@ -241,7 +241,7 @@ export const useStore = create<AppState & AppActions>((set) => ({
   toggleGuide: () => set((state) => ({ guideOpen: !state.guideOpen })),
   setUpperView: (upperView) => set({ upperView }),
   setSeekLocked: (seekLocked) => set({ seekLocked }),
-  setRailZoom: (railZoom) => set({ railZoom }),
+  setRailZoom: (railZoom) => set({ railZoom: Math.min(200, Math.max(8, railZoom)) }),
 
   patchAnalyze: (patch) => set((state) => ({ analyze: { ...state.analyze, ...patch } })),
   setStatus: (status) => set({ status }),

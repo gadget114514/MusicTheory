@@ -21,7 +21,12 @@ interface Props {
   follow: boolean
   onFollowChange?(follow: boolean): void
   onZoom?(pxPerBeat: number): void
+  onSeek?(beat: number): void
+  seekLocked?: boolean
 }
+
+export const STAFF_ZOOM_MIN = 8
+export const STAFF_ZOOM_MAX = 200
 
 const ROW_H = 9
 
@@ -35,6 +40,8 @@ export function StaffView({
   follow,
   onFollowChange,
   onZoom,
+  onSeek,
+  seekLocked,
 }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
@@ -54,7 +61,7 @@ export function StaffView({
       if (!(e.ctrlKey || e.metaKey)) return
       e.preventDefault()
       const delta = e.deltaY > 0 ? -8 : 8
-      zoomRef.current?.(Math.min(200, Math.max(16, pxRef.current + delta)))
+      zoomRef.current?.(Math.min(STAFF_ZOOM_MAX, Math.max(STAFF_ZOOM_MIN, pxRef.current + delta)))
     }
     el.addEventListener('wheel', handler, { passive: false })
     return () => el.removeEventListener('wheel', handler)
@@ -129,11 +136,67 @@ export function StaffView({
     })
   }
 
+  // タイムライン直操作: 空き領域のクリック / ドラッグでシークする。
+  const innerRef = useRef<HTMLDivElement>(null)
+  const scrubbing = useRef(false)
+
+  const seekFromClientX = (clientX: number) => {
+    if (!onSeek || seekLocked) return
+    const inner = innerRef.current
+    if (!inner) return
+    const rect = inner.getBoundingClientRect()
+    onSeek(Math.max(0, (clientX - rect.left) / (pxRef.current || 1)))
+  }
+
+  const handleInnerPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!onSeek || seekLocked || scrubbing.current) return
+    scrubbing.current = true
+    e.currentTarget.setPointerCapture(e.pointerId)
+    seekFromClientX(e.clientX)
+  }
+
+  const handleInnerPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!scrubbing.current) return
+    seekFromClientX(e.clientX)
+  }
+
+  const handleInnerPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!scrubbing.current) return
+    scrubbing.current = false
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }
+    } catch {
+      /* 無視 */
+    }
+  }
+
   const yOf = (midi: number) => (bounds.high - midi) * ROW_H + ROW_H / 2
 
   return (
     <div className="staff">
       <div className="staff-tools">
+        {onZoom ? (
+          <>
+            <button
+              type="button"
+              className="btn btn-tiny"
+              onClick={() => onZoom(Math.max(STAFF_ZOOM_MIN, pxPerBeat - 12))}
+              title="ズームアウト (縮小して全体を見る)"
+            >
+              −
+            </button>
+            <button
+              type="button"
+              className="btn btn-tiny"
+              onClick={() => onZoom(Math.min(STAFF_ZOOM_MAX, pxPerBeat + 12))}
+              title="ズームイン (拡大する)"
+            >
+              ＋
+            </button>
+          </>
+        ) : null}
         {!follow ? (
           <button type="button" className="btn btn-tiny" onClick={jumpToHead} title="再生ヘッドに追従を戻す">
             ▸ 追従に戻す
@@ -141,7 +204,15 @@ export function StaffView({
         ) : null}
       </div>
       <div className="staff-scroll" ref={scrollRef} onScroll={handleScroll}>
-        <div className="staff-inner" style={{ width, height: height + 22 }}>
+        <div
+          className="staff-inner"
+          ref={innerRef}
+          style={{ width, height: height + 22 }}
+          onPointerDown={handleInnerPointerDown}
+          onPointerMove={handleInnerPointerMove}
+          onPointerUp={handleInnerPointerUp}
+          onPointerCancel={handleInnerPointerUp}
+        >
           {showChordLabels
             ? chords.map((chord) => (
                 <span
@@ -174,7 +245,7 @@ export function StaffView({
               className={`staff-note staff-note-${note.source}`}
               style={{
                 left: note.time * pxPerBeat,
-                width: Math.max(4, note.duration * pxPerBeat - 2),
+                width: Math.max(2, note.duration * pxPerBeat - 1),
                 top: yOf(note.midi) - 3,
                 opacity: 0.45 + (note.velocity / 127) * 0.55,
               }}
